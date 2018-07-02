@@ -12,7 +12,7 @@ function cmdHelp(msg, args) {
         embed: {
             color: 0x4496ff,
             title: "Help",
-            description: "Use L!give or L!remove and \nGer for German \nEng for English \nRus for Russian \nFre for French \nSpa for Spanish \nCze for Czech \n**Seperate each Language by a / (Slash)**"
+            description: "Use L!give or L!remove and \nGer for German \nEng for English \nRus for Russian \nFre for French \nSpa for Spanish \nCze for Czech \nSlk for Slovak \n**Seperate each Language by a / (Slash)**"
         }
     });
 }
@@ -71,6 +71,12 @@ client.on("message", (msg) => {
                 author.addRole(role)
             }
 
+            if (args.indexOf("Slk") > -1) {
+                var role = guild.roles.find("name", "Slk")
+                mes += "Slk "
+                author.addRole(role)
+            }
+
             chan.send(mes)
         }else if (invoke == "remove") {
             var mes = `${author} Was removed from Role `;
@@ -108,6 +114,12 @@ client.on("message", (msg) => {
             if (args.indexOf("Cze") > -1) {
                 var role = guild.roles.find("name", "Cze")
                 mes += "Cze "
+                author.removeRole(role)
+            }
+
+            if (args.indexOf("Slk") > -1) {
+                var role = guild.roles.find("name", "Slk")
+                mes += "Slk "
                 author.removeRole(role)
             }
 
