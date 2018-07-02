@@ -1,0 +1,16 @@
+{
+  "name": "languagebotjs",
+  "version": "1.0.0",
+  "description": "A bot for assigning Roles spezific to Language",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js debug",
+    "start": "node main.js"
+  },
+  "author": "Trisge",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "colors": "^1.3.0"
+  }
+}
