@@ -33,7 +33,7 @@ client.on("message", (msg) => {
 
         console.log(invoke, args)
         if (invoke == "give") {
-            boolean rightCMD = false;
+            var rightCMD = false;
             var mes = `${author} Was added to Role `;
 
             if (args.indexOf("Ger") > -1 && args.indexOf("ger") > -1) {
