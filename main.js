@@ -33,97 +33,122 @@ client.on("message", (msg) => {
 
         console.log(invoke, args)
         if (invoke == "give") {
+            boolean rightCMD = false;
             var mes = `${author} Was added to Role `;
 
-            if (args.indexOf("Ger") > -1) {
+            if (args.indexOf("Ger") > -1 && args.indexOf("ger") > -1) {
                 var role = guild.roles.find("name", "Ger")
                 mes += "Ger "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            if (args.indexOf("Eng") > -1) {
+            if (args.indexOf("Eng") > -1 && args.indexOf("eng") {
                 var role = guild.roles.find("name", "Eng")
                 mes += "Eng "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            if (args.indexOf("Rus") > -1) {
+            if (args.indexOf("Rus") > -1 && args.indexOf("rus") {
                 var role = guild.roles.find("name", "Rus")
                 mes += "Rus "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            if (args.indexOf("Fre") > -1) {
+            if (args.indexOf("Fre") > -1 && args.indexOf("fre") {
                 var role = guild.roles.find("name", "Fre")
                 mes += "Fre "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            if (args.indexOf("Spa") > -1) {
+            if (args.indexOf("Spa") > -1 && args.indexOf("spa") {
                 var role = guild.roles.find("name", "Spa")
                 mes += "Spa "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            if (args.indexOf("Cze") > -1) {
+            if (args.indexOf("Cze") > -1 && args.indexOf("cze") {
                 var role = guild.roles.find("name", "Cze")
                 mes += "Cze "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            if (args.indexOf("Slk") > -1) {
+            if (args.indexOf("Slk") > -1 && args.indexOf("slk") {
                 var role = guild.roles.find("name", "Slk")
                 mes += "Slk "
+                rightCMD = true
                 author.addRole(role)
             }
 
-            chan.send(mes)
+            if (rightCMD) {
+                chan.send(mes)
+            } else {
+                chan.send(`${author} no Language recognised`)
+            }
+
         }else if (invoke == "remove") {
             var mes = `${author} Was removed from Role `;
 
-            if (args.indexOf("Ger") > -1) {
+            if (args.indexOf("Ger") > -1 && args.indexOf("ger") {
                 var role = guild.roles.find("name", "Ger")
                 mes += "Ger "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            if (args.indexOf("Eng") > -1) {
+            if (args.indexOf("Eng") > -1 && args.indexOf("eng") {
                 var role = guild.roles.find("name", "Eng")
                 mes += "Eng "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            if (args.indexOf("Rus") > -1) {
+            if (args.indexOf("Rus") > -1 && args.indexOf("rus") {
                 var role = guild.roles.find("name", "Rus")
                 mes += "Rus "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            if (args.indexOf("Fre") > -1) {
+            if (args.indexOf("Fre") > -1 && args.indexOf("fre") {
                 var role = guild.roles.find("name", "Fre")
                 mes += "Fre "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            if (args.indexOf("Spa") > -1) {
+            if (args.indexOf("Spa") > -1 && args.indexOf("spa") {
                 var role = guild.roles.find("name", "Spa")
                 mes += "Spa "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            if (args.indexOf("Cze") > -1) {
+            if (args.indexOf("Cze") > -1 && args.indexOf("cze") {
                 var role = guild.roles.find("name", "Cze")
                 mes += "Cze "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            if (args.indexOf("Slk") > -1) {
+            if (args.indexOf("Slk") > -1 && args.indexOf("slk") {
                 var role = guild.roles.find("name", "Slk")
                 mes += "Slk "
+                rightCMD = true
                 author.removeRole(role)
             }
 
-            chan.send(mes)
+            if (rightCMD) {
+                chan.send(mes)
+            } else {
+                chan.send(`${author} no Language recognised`)
+            }
+            
         } else if (invoke == "help") {
             cmdHelp(msg, args);
         }
