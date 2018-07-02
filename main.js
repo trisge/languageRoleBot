@@ -39,10 +39,11 @@ client.on("message", (msg) => {
             var mes = `${author} Was added to Role `;
             var com = commands.lang
             //console.log(com)
+            console.log(author.user.username)
 
             for (var i = 0; i < args.length; i++) {
                 //console.log(i)
-                console.log(args[i])
+                //console.log(args[i])
                 var index = com.indexOf(args[i])
                 if (index > -1) {
                     var authRole = author.roles.find("name",String(com[index]))
@@ -68,7 +69,7 @@ client.on("message", (msg) => {
             if (rightCMD) {
                 chan.send(mes)
             } else {
-                chan.send(`${author} No further Language recognised`)
+                chan.send(`${author} No further Language recognised. For Help us **L!help**`)
             }
 
         } else if (invoke == "remove") {
@@ -101,7 +102,7 @@ client.on("message", (msg) => {
             if (rightCMD) {
                 chan.send(mes)
             } else {
-                chan.send(`${author} No further Language recognised`)
+                chan.send(`${author} No further Language recognised. For Help us **L!help**`)
             }
             
         } else if (invoke == "help") {
