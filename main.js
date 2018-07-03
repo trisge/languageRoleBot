@@ -69,7 +69,7 @@ client.on("message", (msg) => {
             if (rightCMD) {
                 chan.send(mes)
             } else {
-                chan.send(`${author} No further Language recognised. For Help us **L!help**`)
+                chan.send(`${author} No further Language recognised. For Help use **L!help**`)
             }
 
         } else if (invoke == "remove") {
@@ -102,7 +102,7 @@ client.on("message", (msg) => {
             if (rightCMD) {
                 chan.send(mes)
             } else {
-                chan.send(`${author} No further Language recognised. For Help us **L!help**`)
+                chan.send(`${author} No further Language recognised. For Help use **L!help**`)
             }
             
         } else if (invoke == "help") {
