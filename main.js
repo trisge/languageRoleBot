@@ -26,90 +26,92 @@ client.on("message", (msg) => {
     var cont = msg.content,
         author = msg.member,
         chan = msg.channel,
-        guild = msg.guild,
-        langAss = guild.channels.find("name","language-assignment")
+        guild = msg.guild
 
-    if (author.id != client.user.id && cont.startsWith(config.prefix) && chan == langAss) {
-        var invoke = cont.split(" ")[0].substring(config.prefix.length),
-            args = cont.substring(config.prefix.length + 1 + invoke.length).split("/")
+    if (author.id != client.user.id && cont.startsWith(config.prefix)) {
+        var langAss = guild.channels.find("name", "language-assignment")
+        if (chan == langAss) {
+            var invoke = cont.split(" ")[0].substring(config.prefix.length),
+                args = cont.substring(config.prefix.length + 1 + invoke.length).split("/")
 
-        console.log(invoke, args)
-        if (invoke == "give") {
-            var rightCMD = false
-            var mes = `${author} Was added to Role `;
-            var com = commands.lang
-            //console.log(com)
-            console.log(author.user.username)
+            console.log(invoke, args)
+            if (invoke == "give") {
+                var rightCMD = false
+                var mes = `${author} Was added to Role `;
+                var com = commands.lang
+                //console.log(com)
+                console.log(author.user.username)
 
-            for (var i = 0; i < args.length; i++) {
-                //console.log(i)
-                //console.log(args[i])
-                var index = com.indexOf(args[i])
-                if (index > -1) {
-                    var authRole = author.roles.find("name",String(com[index]))
-                    var authRole2 = author.roles.find("name",String(com[index - 1]))
-                    if (!(authRole || authRole2)) {
-                        var role = guild.roles.find("name", com[index])
-                        if (role) {
-                            mes += com[index] + " "
-                            rightCMD = true
-                            author.addRole(role)
-                        } else {
-                            var role = guild.roles.find("name", com[index - 1])
+                for (var i = 0; i < args.length; i++) {
+                    //console.log(i)
+                    //console.log(args[i])
+                    var index = com.indexOf(args[i])
+                    if (index > -1) {
+                        var authRole = author.roles.find("name", String(com[index]))
+                        var authRole2 = author.roles.find("name", String(com[index - 1]))
+                        if (!(authRole || authRole2)) {
+                            var role = guild.roles.find("name", com[index])
                             if (role) {
-                                mes += com[index - 1] + " "
+                                mes += com[index] + " "
                                 rightCMD = true
                                 author.addRole(role)
+                            } else {
+                                var role = guild.roles.find("name", com[index - 1])
+                                if (role) {
+                                    mes += com[index - 1] + " "
+                                    rightCMD = true
+                                    author.addRole(role)
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (rightCMD) {
-                chan.send(mes)
-            } else {
-                chan.send(`${author} No further Language recognised. For Help use **L!help**`)
-            }
+                if (rightCMD) {
+                    chan.send(mes)
+                } else {
+                    chan.send(`${author} No further Language recognised. For Help use **L!help**`)
+                }
 
-        } else if (invoke == "remove") {
-            var rightCMD = false
-            var mes = `${author} Was removed from Role `;
-            var com = commands.lang
+            } else if (invoke == "remove") {
+                var rightCMD = false
+                var mes = `${author} Was removed from Role `;
+                var com = commands.lang
+                console.log(author.user.username)
 
-            for(var i = 0; i < args.length; i++) {
-                console.log(args[i])
-                var index = com.indexOf(args[i])
-                var authRole = author.roles.find("name",String(com[index]))
-                var authRole2 = author.roles.find("name",String(com[index - 1]))
-                if (authRole || authRole2) {
-                     var role = author.roles.find("name", com[index])
-                     if (role) {
-                        mes += com[index] + " "
-                        rightCMD = true
-                        author.removeRole(role)
-                     } else {
-                        var role = author.roles.find("name", com[index - 1])
+                for (var i = 0; i < args.length; i++) {
+                    //console.log(args[i])
+                    var index = com.indexOf(args[i])
+                    var authRole = author.roles.find("name", String(com[index]))
+                    var authRole2 = author.roles.find("name", String(com[index - 1]))
+                    if (authRole || authRole2) {
+                        var role = author.roles.find("name", com[index])
                         if (role) {
-                            mes += com[index - 1] + " "
+                            mes += com[index] + " "
                             rightCMD = true
                             author.removeRole(role)
+                        } else {
+                            var role = author.roles.find("name", com[index - 1])
+                            if (role) {
+                                mes += com[index - 1] + " "
+                                rightCMD = true
+                                author.removeRole(role)
                             }
                         }
                     }
-            }
+                }
 
-            if (rightCMD) {
-                chan.send(mes)
-            } else {
-                chan.send(`${author} No further Language recognised. For Help use **L!help**`)
+                if (rightCMD) {
+                    chan.send(mes)
+                } else {
+                    chan.send(`${author} No further Language recognised. For Help use **L!help**`)
+                }
+
+            } else if (invoke == "help") {
+                cmdHelp(msg, args);
             }
-            
-        } else if (invoke == "help") {
-            cmdHelp(msg, args);
         }
     }
-
 })
 
 client.login("NDYyMzA2NjIxNzY3NTQ4OTM4.DhuS5Q.ENNimAEJQRGzNW3fLMMZVrhjb0w")//process.env.BOT_TOKEN)
