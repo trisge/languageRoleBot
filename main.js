@@ -19,10 +19,11 @@ function cmdHelp(msg, args) {
     });
 }
 
-function nag() {
-	var guild = client.guilds.find("name", "Why Not Test"),
+function nag(msg) {
+	var guild = msg.guild,
 		roles = [],
 		guiltyPlayer = []
+		//guild = client.guilds.find("name", "COBRA")
 
 	if(guild.available) {
 		var players = guild.members
@@ -162,8 +163,8 @@ client.on("message", (msg) => {
             } else if (invoke == "help") {
                 cmdHelp(msg, args);
             } else if (invoke == "Remind" && author.roles.find("name", "Leader")) {
-            	console.log("Issued by: " + author.user.username)
-            	nag()
+            	console.log("Issued by: " + git commiauthor.user.username)
+            	nag(msg)
             }
         }
     }
