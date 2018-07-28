@@ -61,7 +61,7 @@ function check(msg) {
 }
 
 function remind(msg) {
-	var message = "Guys/Girls use the bot to get a Language Assigned.\n**L!**Help to see possible Commands and Languages\n"
+	var message = "Guys and girls use the bot to get a language assigned.\nUse **L!**Help to see all possible commands and languages\n"
 		guild = msg.guild,
 		roleNoLang = guild.roles.find("name", "NoLanguage")
 
