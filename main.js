@@ -2,6 +2,7 @@
 
 const Discord = require('discord.js')
 const fs = require('fs')
+//const ontime = require('ontime')
 
 const config = JSON.parse(fs.readFileSync('config.json', 'utf8'))
 const commands = JSON.parse(fs.readFileSync("commands.json","utf8"))
@@ -17,6 +18,57 @@ function cmdHelp(msg, args) {
         }
     });
 }
+
+function nag() {
+	var guild = client.guilds.find("name", "Why Not Test"),
+		roles = [],
+		guiltyPlayer = []
+
+	if(guild.available) {
+		var players = guild.members
+		//Chooses every other Role from commands List. 
+		for (var i=0; i < commands.lang.length;i+=2) {
+			//console.log("i: " +i + ", Role: " + commands.lang[i])
+			roles.push(guild.roles.find("name" , commands.lang[i]))
+			//console.log(roles)
+		}
+
+		players.forEach(function (p){
+			var playerRoles = p.roles,
+				hasLangRole = false
+			if(p.id != client.user.id) {
+				//console.log(p.user.username)
+				playerRoles.forEach (function(r){
+					if(roles.includes(r)) {
+						hasLangRole = true
+					}
+				})
+				if(!hasLangRole) {
+					guiltyPlayer.push(p)
+					//console.log(p.user.username)
+				}
+			}
+		})
+		var message = "*Guys/Girls use the bot to get a Language Assigned.\n**L!**Help to see possible Commands and Languages\n"
+
+		guiltyPlayer.forEach(function(p){
+			message += `${p} `
+		})
+
+		var langAss = guild.channels.find("name", "language-assignment")
+		langAss.send(message)
+	}
+}
+
+/*ontime({
+	cycle: "12:00:00"
+},	function (ot) {
+	
+
+	ot.done()
+	return
+}
+})*/
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.username}...`)
@@ -109,6 +161,9 @@ client.on("message", (msg) => {
 
             } else if (invoke == "help") {
                 cmdHelp(msg, args);
+            } else if (invoke == "Remind" && author.roles.find("name", "Leader")) {
+            	console.log("Issued by: " + author.user.username)
+            	nag()
             }
         }
     }
