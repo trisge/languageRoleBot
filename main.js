@@ -19,10 +19,11 @@ function cmdHelp(msg, args) {
     });
 }
 
-function nag(msg) {
+function check(msg) {
 	var guild = msg.guild,
 		roles = [],
-		guiltyPlayer = []
+		guiltyPlayer = [],
+		roleNoLang = guild.roles.find("name", "NoLanguage")
 		//guild = client.guilds.find("name", "COBRA")
 
 	if(guild.available) {
@@ -46,20 +47,35 @@ function nag(msg) {
 				})
 				if(!hasLangRole) {
 					guiltyPlayer.push(p)
+					p.addRole(roleNoLang)
 					//console.log(p.user.username)
+				} else {
+					if(p.roles.find("name", "NoLanguage")) {
+						p.removeRole(roleNoLang)
+					}
 				}
 			}
 		})
-		var message = "*Guys/Girls use the bot to get a Language Assigned.\n**L!**Help to see possible Commands and Languages\n"
-
-		guiltyPlayer.forEach(function(p){
-			message += `${p} `
-		})
-
-		var langAss = guild.channels.find("name", "language-assignment")
-		langAss.send(message)
+		
 	}
 }
+
+function remind(msg) {
+	var message = "Guys/Girls use the bot to get a Language Assigned.\n**L!**Help to see possible Commands and Languages\n"
+		guild = msg.guild,
+		roleNoLang = guild.roles.find("name", "NoLanguage")
+
+	message += `${roleNoLang}`
+	/*guiltyPlayer.forEach(function(p){
+		message += `${p} `
+	})*/
+
+	var langAss = guild.channels.find("name", "language-assignment")
+	langAss.send(message)
+
+}
+
+
 
 /*ontime({
 	cycle: "12:00:00"
@@ -79,7 +95,8 @@ client.on("message", (msg) => {
     var cont = msg.content,
         author = msg.member,
         chan = msg.channel,
-        guild = msg.guild
+        guild = msg.guild,
+        roleNoLang = guild.roles.find("name", "NoLanguage")
 
     if (author.id != client.user.id && cont.startsWith(config.prefix)) {
         var langAss = guild.channels.find("name", "language-assignment")
@@ -93,7 +110,7 @@ client.on("message", (msg) => {
                 var mes = `${author} Was added to Role `;
                 var com = commands.lang
                 //console.log(com)
-                console.log(author.user.username)
+                console.log("Issued by: " + author.user.username)
 
                 for (var i = 0; i < args.length; i++) {
                     //console.log(i)
@@ -116,6 +133,9 @@ client.on("message", (msg) => {
                                     author.addRole(role)
                                 }
                             }
+                            if(author.roles.find("name", "NoLanguage")) {
+                            	author.removeRole(roleNoLang)
+                            }
                         }
                     }
                 }
@@ -130,7 +150,7 @@ client.on("message", (msg) => {
                 var rightCMD = false
                 var mes = `${author} Was removed from Role `;
                 var com = commands.lang
-                console.log(author.user.username)
+                console.log("Issued by: " + author.user.username)
 
                 for (var i = 0; i < args.length; i++) {
                     //console.log(args[i])
@@ -162,10 +182,13 @@ client.on("message", (msg) => {
 
             } else if (invoke == "help") {
                 cmdHelp(msg, args);
-            } /*else if (invoke == "Remind" && author.roles.find("name", "Leader")) {
+            } else if (invoke == "remind" && author.roles.find("name", "Leader")) {
             	console.log("Issued by: " + author.user.username)
-            	nag(msg)
-            }*/
+            	remind(msg)
+            } else if (invoke == "check" && author.roles.find("name", "Leader")) {
+            	console.log("Issued by: " + author.user.username)
+            	check(msg)
+            }
         }
     }
 })
