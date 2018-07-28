@@ -163,7 +163,7 @@ client.on("message", (msg) => {
             } else if (invoke == "help") {
                 cmdHelp(msg, args);
             } else if (invoke == "Remind" && author.roles.find("name", "Leader")) {
-            	console.log("Issued by: " + git commiauthor.user.username)
+            	console.log("Issued by: " + author.user.username)
             	nag(msg)
             }
         }
