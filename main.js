@@ -14,7 +14,7 @@ function cmdHelp(msg, args) {
         embed: {
             color: 0x4496ff,
             title: "Help",
-            description: "**Use L!give or L!remove and**\nGer for German \nEng for English \nRus for Russian \nFre for French \nSpa for Spanish \nCze for Czech \nSlk for Slovak \nDan for Danish \nPol for Polnish \nIta for Italian \n**Seperate each Language by a / (Slash)** \n\n*Like L!give Eng/Rus to get Role Eng and Rus*"
+            description: "**Use L!give or L!remove and**\nGer for German \nEng for English \nRus for Russian \nFre for French \nSpa for Spanish \nCze for Czech \nSlk for Slovak \nDan for Danish \nPol for Polnish \nIta for Italian \nPor for Portuguese \n**Seperate each Language by a / (Slash)** \n\n*Like L!give Eng/Rus to get Role Eng and Rus*"
         }
     });
 }

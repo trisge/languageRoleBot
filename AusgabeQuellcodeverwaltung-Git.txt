@@ -1,0 +1,2 @@
+﻿Öffnen von Repositorys:
+D:\Programmieren\Discord\LanguageBot\LanguageBotJS
