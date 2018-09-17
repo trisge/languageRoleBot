@@ -10,72 +10,94 @@ const commands = JSON.parse(fs.readFileSync("commands.json","utf8"))
 var client = new Discord.Client()
 
 function cmdHelp(msg, args) {
-    msg.channel.send({
-        embed: {
-            color: 0x4496ff,
-            title: "Help",
-            description: "**Use L!give or L!remove and**\nGer for German \nEng for English \nRus for Russian \nFre for French \nSpa for Spanish \nCze for Czech \nSlk for Slovak \nDan for Danish \nPol for Polnish \nIta for Italian \nPor for Portuguese \nKor for Korean \n**Seperate each Language by a / (Slash)** \n\n*Like L!give Eng/Rus to get Role Eng and Rus*"
+    var languages = "",
+        guild = msg.guild,
+        roleReady = false,
+        avCom = []
+
+    for (var i = 0; i < commands.lang.length; i++) {
+        if (guild.roles.find("name", commands.lang[i])) {
+            descr = commands.descr[i]
+            avCom.push(commands.lang[i])
+            languages += "\n" + descr
+            roleReady = true;
+            //console.log("Found Lang: " + commands.lang[i])
         }
-    });
+    }
+    if (roleReady) {
+        msg.channel.send({
+            embed: {
+                color: 0x4496ff,
+                title: "Help",
+                description: "**Use L!give or L!remove and**" + languages + "\n**Seperate each Language by a / (Slash)** \n\n*Like L!give " + avCom[0]+ "/" + avCom[1] + " to get Role Eng and Rus*"
+            }
+        });
+    } else {
+        msg.channel.send({
+            embed: {
+                color: 0x4496ff,
+                title: "Help",
+                description: "No language roles setup."
+            }
+        });
+    }
 }
 
 function check(msg) {
-	var guild = msg.guild,
-		roles = [],
+    var guild = msg.guild,
+        roles = []
 		guiltyPlayer = [],
 		roleNoLang = guild.roles.find("name", "NoLanguage")
-		//guild = client.guilds.find("name", "COBRA")
+    if (roleNoLang != null) {
+        if (guild.available) {
+            var players = guild.members
+            //Get every Role from commands List which is active. 
+            for (var i = 0; i < commands.lang.length; i++) {
+                //console.log("i: " +i + ", Role: " + commands.lang[i])
+                roles.push(guild.roles.find("name", commands.lang[i]))
+                //console.log(roles)
+            }
 
-	if(guild.available) {
-		var players = guild.members
-		//Chooses every other Role from commands List. 
-		for (var i=0; i < commands.lang.length;i+=2) {
-			//console.log("i: " +i + ", Role: " + commands.lang[i])
-			roles.push(guild.roles.find("name" , commands.lang[i]))
-			//console.log(roles)
-		}
-
-		players.forEach(function (p){
-			var playerRoles = p.roles,
-				hasLangRole = false
-			if(p.id != client.user.id) {
-				//console.log(p.user.username)
-				playerRoles.forEach (function(r){
-					if(roles.includes(r)) {
-						hasLangRole = true
-					}
-				})
-				if(!hasLangRole) {
-					guiltyPlayer.push(p)
-					p.addRole(roleNoLang)
-					//console.log(p.user.username)
-				} else {
-					if(p.roles.find("name", "NoLanguage")) {
-						p.removeRole(roleNoLang)
-					}
-				}
-			}
-		})
-		
-	}
-}
+            players.forEach(function (p) {
+                var playerRoles = p.roles,
+                    hasLangRole = false
+                if (p.id != client.user.id) {
+                    console.log(p.user.username)
+                    playerRoles.forEach(function (r) {
+                        if (roles.includes(r)) {
+                            hasLangRole = true
+                        }
+                    })
+                    if (!hasLangRole) {
+                        guiltyPlayer.push(p)
+                        p.addRole(roleNoLang)
+                        //console.log(p.user.username)
+                    } else {
+                        if (p.roles.find("name", "NoLanguage")) {
+                            p.removeRole(roleNoLang)
+                        }
+                    }
+                }
+            })
+        }
+    } else {
+        msg.channel.send(`${msg.author} There is no role **NoLanguage**. Please add the role before using L!check.`)
+    }
+}   
 
 function remind(msg) {
 	var message = "Guys and girls use the bot to get a language assigned.\nUse **L!**help to see all possible commands and languages\n"
 		guild = msg.guild,
 		roleNoLang = guild.roles.find("name", "NoLanguage")
-
 	message += `${roleNoLang}`
-	/*guiltyPlayer.forEach(function(p){
-		message += `${p} `
-	})*/
-
-	var langAss = guild.channels.find("name", "language-assignment")
-	langAss.send(message)
+    var langAss = guild.channels.find("name", "language-assignment")
+    if (roleNoLang == null) {
+        langAss.send(`${msg.author} There is no role **NoLanguage** to notify. Please add the role before using L!remind.`)
+    } else {
+        langAss.send(message)
+    }
 
 }
-
-
 
 /*ontime({
 	cycle: "12:00:00"
@@ -105,7 +127,7 @@ client.on("message", (msg) => {
                 args = cont.substring(config.prefix.length + 1 + invoke.length).split("/")
 
             console.log(invoke, args)
-            if (invoke == "give") {
+            if (invoke.toLowerCase() == "give") {
                 var rightCMD = false
                 var mes = `${author} Was added to Role `;
                 var com = commands.lang
@@ -114,24 +136,18 @@ client.on("message", (msg) => {
 
                 for (var i = 0; i < args.length; i++) {
                     //console.log(i)
-                    //console.log(args[i])
-                    var index = com.indexOf(args[i])
+                    //console.log(args[i].toUpperCase())           
+                    var index = com.indexOf(args[i].toUpperCase())
+                    //console.log(index)
                     if (index > -1) {
-                        var authRole = author.roles.find("name", String(com[index]))
-                        var authRole2 = author.roles.find("name", String(com[index - 1]))
-                        if (!(authRole || authRole2)) {
-                            var role = guild.roles.find("name", com[index])
+                        var command = com[index],
+                            authRole = author.roles.find("name", command)
+                        if (!authRole) {
+                            var role = guild.roles.find("name", command)
                             if (role) {
-                                mes += com[index] + " "
+                                mes += command + " "
                                 rightCMD = true
                                 author.addRole(role)
-                            } else {
-                                var role = guild.roles.find("name", com[index - 1])
-                                if (role) {
-                                    mes += com[index - 1] + " "
-                                    rightCMD = true
-                                    author.addRole(role)
-                                }
                             }
                             if(author.roles.find("name", "NoLanguage")) {
                             	author.removeRole(roleNoLang)
@@ -146,46 +162,43 @@ client.on("message", (msg) => {
                     chan.send(`${author} No further Language recognised. For Help use **L!help**`)
                 }
 
-            } else if (invoke == "remove") {
+            } else if (invoke.toLowerCase() == "remove") {
                 var rightCMD = false
                 var mes = `${author} Was removed from Role `;
                 var com = commands.lang
                 console.log("Issued by: " + author.user.username)
 
                 for (var i = 0; i < args.length; i++) {
-                    //console.log(args[i])
-                    var index = com.indexOf(args[i])
-                    var authRole = author.roles.find("name", String(com[index]))
-                    var authRole2 = author.roles.find("name", String(com[index - 1]))
-                    if (authRole || authRole2) {
-                        var role = author.roles.find("name", com[index])
-                        if (role) {
-                            mes += com[index] + " "
-                            rightCMD = true
-                            author.removeRole(role)
-                        } else {
-                            var role = author.roles.find("name", com[index - 1])
+                    //console.log(i)
+                    //console.log(args[i].toUpperCase())
+                    var index = com.indexOf(args[i].toUpperCase())
+                    if (index > -1) {
+                        var command = com[index].toUpperCase(),
+                            authRole = author.roles.find("name", command)
+                        if (authRole != null) {
+                            var role = guild.roles.find("name", command)
                             if (role) {
-                                mes += com[index - 1] + " "
+                                mes += command + " "
                                 rightCMD = true
                                 author.removeRole(role)
                             }
                         }
                     }
                 }
-
+                
                 if (rightCMD) {
                     chan.send(mes)
                 } else {
                     chan.send(`${author} No further Language recognised. For Help use **L!help**`)
                 }
 
-            } else if (invoke == "help") {
+            } else if (invoke.toLowerCase() == "help") {
                 cmdHelp(msg, args);
-            } else if (invoke == "remind" && author.roles.find("name", "Leader")) {
+                console.log("Issued by: " + author.user.username)
+            } else if (invoke.toLowerCase() == "remind" && author.roles.find("name", "Bot Commander")) {
             	console.log("Issued by: " + author.user.username)
             	remind(msg)
-            } else if (invoke == "check" && author.roles.find("name", "Leader")) {
+            } else if (invoke.toLowerCase() == "check" && author.roles.find("name", "Bot Commander")) {
             	console.log("Issued by: " + author.user.username)
             	check(msg)
             }
