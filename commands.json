@@ -1,4 +1,4 @@
 {
-  "lang": [ "GER", "ENG", "RUS", "FRE", "SPA", "CZE", "SLK", "DAN", "POL", "ITA", "POR", "KOR" ],
-  "descr": [ "Ger for German", "Eng for English", "Rus for Russian", "Fre for French", "Spa for Spanish", "Cze for Czech", "Slk for Slovak", "Dan for Danish", "Pol for Polish","Ita for Italian","Por for Portuguese","Kor for Korean"]
+  "lang": [ "GER", "ENG", "RUS", "FRE", "SPA", "CZE", "SLK", "DAN", "POL", "ITA", "POR", "KOR", "UKR" ],
+  "descr": [ "Ger for German", "Eng for English", "Rus for Russian", "Fre for French", "Spa for Spanish", "Cze for Czech", "Slk for Slovak", "Dan for Danish", "Pol for Polish","Ita for Italian","Por for Portuguese","Kor for Korean","Ukr for Ukrainian"]
 }
